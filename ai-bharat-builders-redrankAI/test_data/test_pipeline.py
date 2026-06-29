@@ -21,8 +21,8 @@ import json
 import sys
 from pathlib import Path
 
-# Allow imports from the source folder
-SOURCE_DIR = Path(__file__).parent.parent / "ai-bharat-builders-redrankAI"
+# Allow imports from the source folder (parent of test_data/)
+SOURCE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SOURCE_DIR))
 
 import numpy as np
