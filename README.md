@@ -74,6 +74,7 @@ The top 100 scores are normalised to `[0.30, 0.99]` non-increasing. Ties are bro
 ```
 ai-bharat-builders-redrankAI/               ← GitHub repo root
 ├── README.md                               # This file
+├── LICENSE                                 # MIT License
 ├── requirements.txt                        # Root-level deps for Streamlit Cloud deployment
 ├── .gitignore                              # Excludes candidates.jsonl.gz, __pycache__, .venv
 ├── .gitattributes                          # Git LFS tracking for *.npy files
