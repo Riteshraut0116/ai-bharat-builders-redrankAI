@@ -72,20 +72,21 @@ The top 100 scores are normalised to `[0.30, 0.99]` non-increasing. Ties are bro
 ## 📁 Repo Structure
 
 ```
-ai-bharat-builders-redrankAI/
-├── precompute.py          # Phase 1: encode JD + all 100K candidates → .npy files
-├── rank.py                # Phase 2: load .npy, score, blend, write submission.csv
-├── scorer.py              # Five pure scoring functions (skill/career/exp/loc/behavioral)
-├── honeypot.py            # Honeypot detection — filters fabricated profiles
-├── app.py                 # Streamlit sandbox (upload JSON → rank → download CSV)
-├── convert_to_xlsx.py     # Convert submission.csv → formatted submission.xlsx
-├── requirements.txt       # Core pipeline deps (rank.py + precompute.py)
-├── requirements-sandbox.txt  # Full deps including Streamlit + pandas
-├── submission_metadata.yaml  # Team identity, compute specs, AI tools declaration
-├── Dockerfile             # CPU-only Docker image for reproducible ranking
-├── .gitignore             # Excludes candidates.jsonl.gz, __pycache__, .env
-├── .gitattributes         # Git LFS tracking for *.npy files
-└── README.md              # This file
+ai-bharat-builders-redrankAI/          ← GitHub repo root
+├── README.md                          # This file
+├── .gitignore                         # Excludes candidates.jsonl.gz, __pycache__, .env
+├── .gitattributes                     # Git LFS tracking for *.npy files
+└── ai-bharat-builders-redrankAI/      # Source code folder
+    ├── precompute.py                  # Phase 1: encode JD + all 100K candidates → .npy files
+    ├── rank.py                        # Phase 2: load .npy, score, blend, write submission.csv
+    ├── scorer.py                      # Five pure scoring functions (skill/career/exp/loc/behavioral)
+    ├── honeypot.py                    # Honeypot detection — filters fabricated profiles
+    ├── app.py                         # Streamlit sandbox (upload JSON → rank → download CSV)
+    ├── convert_to_xlsx.py             # Convert submission.csv → formatted submission.xlsx
+    ├── requirements.txt               # Core pipeline deps (rank.py + precompute.py)
+    ├── requirements-sandbox.txt       # Full deps including Streamlit + pandas
+    ├── submission_metadata.yaml       # Team identity, compute specs, AI tools declaration
+    └── Dockerfile                     # CPU-only Docker image for reproducible ranking
 ```
 
 ---
