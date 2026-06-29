@@ -25,7 +25,7 @@ team_members:
 # ============================================================================
 github_repo: "https://github.com/Riteshraut0116/ai-bharat-builders-redrankAI"
 
-sandbox_link: "https://huggingface.co/spaces/ai-bharat-builders/redrankAI"
+sandbox_link: "https://ai-bharat-builders-redrankai-demo.streamlit.app"
 
 reproduce_command: "python rank.py --candidates ./candidates.jsonl.gz --embeddings ./embeddings.npy --ids ./candidate_ids.npy --jd ./jd_embedding.npy --out ./submission.csv"
 

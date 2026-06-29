@@ -337,7 +337,7 @@ Flagged profiles are excluded from ranking entirely.
 
 ## 🖥️ Sandbox
 
-**HuggingFace Spaces:** [https://huggingface.co/spaces/ai-bharat-builders/redrankAI](https://huggingface.co/spaces/ai-bharat-builders/redrankAI) *(replace with your actual link)*
+**Live Demo:** [https://ai-bharat-builders-redrankai-demo.streamlit.app](https://ai-bharat-builders-redrankai-demo.streamlit.app)
 
 ### Run locally
 
