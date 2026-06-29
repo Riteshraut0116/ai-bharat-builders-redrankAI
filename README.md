@@ -74,8 +74,11 @@ The top 100 scores are normalised to `[0.30, 0.99]` non-increasing. Ties are bro
 ```
 ai-bharat-builders-redrankAI/               ← GitHub repo root
 ├── README.md                               # This file
+├── requirements.txt                        # Root-level deps for Streamlit Cloud deployment
 ├── .gitignore                              # Excludes candidates.jsonl.gz, __pycache__, .venv
 ├── .gitattributes                          # Git LFS tracking for *.npy files
+├── assets/
+│   └── screenshot.png                     # Live demo screenshot
 ├── ai-bharat-builders-redrankAI/           # Source code folder
 │   ├── precompute.py                       # Phase 1: encode JD + all 100K candidates → .npy files
 │   ├── rank.py                             # Phase 2: load .npy, score, blend, write submission.csv
@@ -338,6 +341,15 @@ Flagged profiles are excluded from ranking entirely.
 ## 🖥️ Sandbox
 
 **Live Demo:** [https://ai-bharat-builders-redrankai-demo.streamlit.app](https://ai-bharat-builders-redrankai-demo.streamlit.app)
+
+![RedrankAI Demo](assets/screenshot.png)
+
+### How to use the sandbox:
+1. Go to [ai-bharat-builders-redrankai-demo.streamlit.app](https://ai-bharat-builders-redrankai-demo.streamlit.app)
+2. Upload `test_data/sample_candidates.json` from this repo
+3. Click **🚀 Run Ranker**
+4. View ranked results with scores, titles, locations and reasoning
+5. Click **⬇️ Download submission.csv** to export
 
 ### Run locally
 
