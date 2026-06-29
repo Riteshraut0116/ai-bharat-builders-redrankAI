@@ -1,0 +1,88 @@
+# Redrob Hackathon — Submission Metadata
+# Team: AI Bharat Builders
+
+# ============================================================================
+# Team identity
+# ============================================================================
+team_name: "AI Bharat Builders"
+
+primary_contact:
+  name: "Ritesh Raut"
+  email: "riteshraut0116@gmail.com"
+
+team_members:
+  - name: "Ritesh Raut"
+    email: "riteshraut0116@gmail.com"
+    role: "Team Lead / AI Engineer"
+
+  - name: "Tasarun Nasreen"
+    email: "24158097@kiit.ac.in"
+    role: "AI Engineer"
+
+# ============================================================================
+# Code and reproducibility
+# ============================================================================
+github_repo: "https://github.com/ritesh-raut/ai-bharat-builders-redrankAI"
+
+sandbox_link: "https://huggingface.co/spaces/ai-bharat-builders/redrankAI"
+
+reproduce_command: "python rank.py --candidates ./candidates.jsonl.gz --embeddings ./embeddings.npy --ids ./candidate_ids.npy --jd ./jd_embedding.npy --out ./submission.csv"
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "Local Windows / Linux workstation"
+  cpu_cores: 8
+  ram_gb: 16
+  python_version: "3.11"
+  os: "Windows 11 / Ubuntu 22.04 LTS"
+  uses_gpu_for_inference: false
+  has_network_during_ranking: false
+  pre_computation_required: true
+  pre_computation_time_minutes: 15
+
+# ============================================================================
+# AI tools declaration
+# ============================================================================
+ai_tools_used:
+  - "sentence-transformers (HuggingFace) — all-MiniLM-L6-v2 for offline embedding"
+  - "Claude — code review and architecture discussion"
+
+ai_usage_summary: |
+  Used sentence-transformers (all-MiniLM-L6-v2) as the embedding backbone for
+  offline semantic similarity. Used Claude for code review and architectural
+  discussion during development. All scoring logic, rule design, JD analysis,
+  and engineering decisions are human-authored. No candidate data was fed to
+  any LLM or external API.
+
+# ============================================================================
+# Approach summary
+# ============================================================================
+methodology_summary: |
+  RedrankAI is a two-phase offline candidate ranking system for the Senior AI
+  Engineer role at Redrob AI.
+
+  Phase 1 (Offline Precompute, ~15 min): The job description and all 100K
+  candidate profile summaries are encoded once using all-MiniLM-L6-v2
+  (80 MB, CPU-only). Outputs are three .npy files: embeddings, candidate IDs,
+  and the JD vector.
+
+  Phase 2 (Timed Ranking, <2 min): rank.py loads the .npy files, computes
+  vectorised cosine similarity in NumPy, streams candidates.jsonl.gz, filters
+  honeypot profiles, and blends semantic (60%) with rule-based (40%) scores.
+  The rule scorer has five components: skills match (35%), career trajectory
+  (25%), experience fit (15%), location + notice period (10%), and 23-signal
+  behavioural score (15%). Scores are normalised to [0.30, 0.99] with ties
+  broken by candidate_id ascending. Output is submission.csv with exactly 100
+  rows. Validated with validate_submission.py (zero errors).
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true
+  reproduction_tested: true

@@ -1,0 +1,9 @@
+# Sandbox / app.py dependencies (includes Streamlit and Excel support)
+# Install torch first with CPU-only wheel:
+#   pip install torch==2.3.1+cpu --index-url https://download.pytorch.org/whl/cpu
+torch==2.3.1+cpu
+sentence-transformers==2.7.0
+numpy==1.26.4
+streamlit==1.35.0
+pandas==2.2.2
+openpyxl==3.1.2
