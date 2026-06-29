@@ -9,6 +9,7 @@ team_name: "AI Bharat Builders"
 primary_contact:
   name: "Ritesh Raut"
   email: "riteshraut0116@gmail.com"
+  phone: "+91-9075405742"   
 
 team_members:
   - name: "Ritesh Raut"
@@ -22,7 +23,7 @@ team_members:
 # ============================================================================
 # Code and reproducibility
 # ============================================================================
-github_repo: "https://github.com/ritesh-raut/ai-bharat-builders-redrankAI"
+github_repo: "https://github.com/Riteshraut0116/ai-bharat-builders-redrankAI"
 
 sandbox_link: "https://huggingface.co/spaces/ai-bharat-builders/redrankAI"
 

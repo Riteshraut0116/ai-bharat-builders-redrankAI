@@ -72,21 +72,26 @@ The top 100 scores are normalised to `[0.30, 0.99]` non-increasing. Ties are bro
 ## 📁 Repo Structure
 
 ```
-ai-bharat-builders-redrankAI/          ← GitHub repo root
-├── README.md                          # This file
-├── .gitignore                         # Excludes candidates.jsonl.gz, __pycache__, .env
-├── .gitattributes                     # Git LFS tracking for *.npy files
-└── ai-bharat-builders-redrankAI/      # Source code folder
-    ├── precompute.py                  # Phase 1: encode JD + all 100K candidates → .npy files
-    ├── rank.py                        # Phase 2: load .npy, score, blend, write submission.csv
-    ├── scorer.py                      # Five pure scoring functions (skill/career/exp/loc/behavioral)
-    ├── honeypot.py                    # Honeypot detection — filters fabricated profiles
-    ├── app.py                         # Streamlit sandbox (upload JSON → rank → download CSV)
-    ├── convert_to_xlsx.py             # Convert submission.csv → formatted submission.xlsx
-    ├── requirements.txt               # Core pipeline deps (rank.py + precompute.py)
-    ├── requirements-sandbox.txt       # Full deps including Streamlit + pandas
-    ├── submission_metadata.yaml       # Team identity, compute specs, AI tools declaration
-    └── Dockerfile                     # CPU-only Docker image for reproducible ranking
+ai-bharat-builders-redrankAI/               ← GitHub repo root
+├── README.md                               # This file
+├── .gitignore                              # Excludes candidates.jsonl.gz, __pycache__, .venv
+├── .gitattributes                          # Git LFS tracking for *.npy files
+├── ai-bharat-builders-redrankAI/           # Source code folder
+│   ├── precompute.py                       # Phase 1: encode JD + all 100K candidates → .npy files
+│   ├── rank.py                             # Phase 2: load .npy, score, blend, write submission.csv
+│   ├── scorer.py                           # Five pure scoring functions (skill/career/exp/loc/behavioral)
+│   ├── honeypot.py                         # Honeypot detection — filters fabricated profiles
+│   ├── app.py                              # Streamlit sandbox (upload JSON → rank → download CSV)
+│   ├── convert_to_xlsx.py                  # Convert submission.csv → formatted submission.xlsx
+│   ├── requirements.txt                    # Core pipeline deps (rank.py + precompute.py)
+│   ├── requirements-sandbox.txt            # Full deps including Streamlit + pandas
+│   ├── submission_metadata.yaml            # Team identity, compute specs, AI tools declaration
+│   ├── Dockerfile                          # CPU-only Docker image for reproducible ranking
+│   └── test_data/                          # Sample data for local testing (no full dataset needed)
+│       ├── sample_candidates.json          # 50 sample candidate profiles
+│       ├── sample_submission.csv           # Reference valid submission format
+│       ├── candidate_schema.json           # Full candidate field schema
+│       └── test_pipeline.py               # End-to-end smoke test (no model/GPU required)
 ```
 
 ---
@@ -96,23 +101,37 @@ ai-bharat-builders-redrankAI/          ← GitHub repo root
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/ritesh-raut/ai-bharat-builders-redrankAI.git
+git clone https://github.com/Riteshraut0116/ai-bharat-builders-redrankAI.git
 cd ai-bharat-builders-redrankAI
 ```
 
-### 2. Install PyTorch (CPU-only wheel)
+### 2. Navigate into the source folder
+
+```bash
+cd ai-bharat-builders-redrankAI
+```
+
+### 3. Create and activate a virtual environment
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate        # Windows
+# source .venv/bin/activate   # Mac/Linux
+```
+
+### 4. Install PyTorch (CPU-only wheel)
 
 ```bash
 pip install torch==2.3.1+cpu --index-url https://download.pytorch.org/whl/cpu
 ```
 
-### 3. Install remaining dependencies
+### 5. Install remaining dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Download and save the model locally
+### 6. Download and save the model locally
 
 Run this once. It saves the model to `./model` so ranking never needs network access.
 
@@ -123,7 +142,7 @@ model.save("./model")
 print("Model saved to ./model")
 ```
 
-### 5. Run precompute (once, offline)
+### 7. Run precompute (once, offline, ~15 min)
 
 ```bash
 python precompute.py \
@@ -134,7 +153,7 @@ python precompute.py \
 
 This produces `embeddings.npy`, `candidate_ids.npy`, and `jd_embedding.npy`.
 
-### 6. Run the ranker
+### 8. Run the ranker (<2 min)
 
 ```bash
 python rank.py \
@@ -145,17 +164,24 @@ python rank.py \
     --out ./submission.csv
 ```
 
-### 7. Validate the output
+### 9. Validate the output
 
 ```bash
 python validate_submission.py submission.csv
 # Expected: "Submission is valid."
 ```
 
-### 8. Convert to XLSX for portal upload
+### 10. Convert to XLSX for portal upload
 
 ```bash
 python convert_to_xlsx.py --input ./submission.csv --output ./submission.xlsx
+```
+
+### 11. (Optional) Run smoke test without full dataset
+
+```bash
+python test_data/test_pipeline.py
+# Expected: "All tests passed! [OK]"
 ```
 
 ---
