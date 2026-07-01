@@ -518,7 +518,7 @@ All scoring logic, rule design, JD signal analysis, and engineering decisions ar
 
 > 📽️ Watch RedrankAI rank 100K candidates live — precompute phase, scoring pipeline, and the Streamlit sandbox in action.
 
-**Demo Video:** *(link to be added)*
+**Demo Video:** *(https://drive.google.com/file/d/1ZKyQITpHz_Z2RcIi-FbZbpoihuak6VFa/view?usp=sharing)*
 
 ### What the demo covers:
 1. **⚙️ Precompute phase** — encoding 100K candidate summaries with `all-MiniLM-L6-v2` into `.npy` files
