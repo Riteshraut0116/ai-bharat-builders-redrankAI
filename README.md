@@ -201,7 +201,7 @@ INFO Done. Total time: ~90 seconds
 ### 10. Validate the output
 
 ```bash
-python test_data/validate_submission.py submission.csv candidates.jsonl
+python test_data/validate_submission.py submission.csv
 ```
 
 Expected output:
@@ -447,20 +447,28 @@ The `.gitattributes` file in this repo already contains:
 ### Build
 
 ```bash
-docker build -t redrankai:latest .
+docker build -t redrankai ai-bharat-builders-redrankAI/
 ```
 
 ### Run
 
-Mount a directory containing `candidates.jsonl` and the three `.npy` files:
+Mount the directory containing your data files to `/data` and an output folder to `/out`:
 
 ```bash
+# Linux / Mac
 docker run --rm \
-  -v $(pwd):/app \
-  redrankai:latest
+  -v $(pwd):/data:ro \
+  -v $(pwd)/docker_out:/out \
+  redrankai
+
+# Windows PowerShell
+docker run --rm `
+  -v "${PWD}:/data:ro" `
+  -v "${PWD}/docker_out:/out" `
+  redrankai
 ```
 
-Output `submission.csv` will appear in the mounted directory.
+Output `submission.csv` will appear in `docker_out/`.
 
 ---
 
@@ -510,7 +518,7 @@ All scoring logic, rule design, JD signal analysis, and engineering decisions ar
 
 > 📽️ Watch RedrankAI rank 100K candidates live — precompute phase, scoring pipeline, and the Streamlit sandbox in action.
 
-**Demo Video:** [▶️ Click here to watch the demo](https://your-demo-video-link-here) *(replace with your actual link — YouTube, Loom, or Google Drive)*
+**Demo Video:** *(link to be added)*
 
 ### What the demo covers:
 1. **⚙️ Precompute phase** — encoding 100K candidate summaries with `all-MiniLM-L6-v2` into `.npy` files
