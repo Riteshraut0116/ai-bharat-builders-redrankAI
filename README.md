@@ -202,7 +202,7 @@ INFO Done. Total time: ~90 seconds
 ### 10. Validate the output
 
 ```bash
-python test_data/validate_submission.py submission.csv
+python test_data/validate_submission.py submission.csv candidates.jsonl
 ```
 
 Expected output:
