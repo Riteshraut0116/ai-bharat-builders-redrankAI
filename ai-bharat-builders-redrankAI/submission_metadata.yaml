@@ -27,7 +27,7 @@ github_repo: "https://github.com/Riteshraut0116/ai-bharat-builders-redrankAI"
 
 sandbox_link: "https://ai-bharat-builders-redrankai-demo.streamlit.app"
 
-reproduce_command: "python rank.py --candidates ./candidates.jsonl.gz --embeddings ./embeddings.npy --ids ./candidate_ids.npy --jd ./jd_embedding.npy --out ./submission.csv"
+reproduce_command: "python rank.py --candidates ./candidates.jsonl --embeddings ./embeddings.npy --ids ./candidate_ids.npy --jd ./jd_embedding.npy --out ./submission.csv"
 
 # ============================================================================
 # Compute environment
@@ -70,7 +70,7 @@ methodology_summary: |
   and the JD vector.
 
   Phase 2 (Timed Ranking, <2 min): rank.py loads the .npy files, computes
-  vectorised cosine similarity in NumPy, streams candidates.jsonl.gz, filters
+  vectorised cosine similarity in NumPy, streams candidates.jsonl, filters
   honeypot profiles, and blends semantic (60%) with rule-based (40%) scores.
   The rule scorer has five components: skills match (35%), career trajectory
   (25%), experience fit (15%), location + notice period (10%), and 23-signal

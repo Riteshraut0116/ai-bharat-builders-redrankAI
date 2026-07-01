@@ -44,7 +44,7 @@ The job description and all 100K candidate summaries are encoded with `all-MiniL
 
 **Phase 2 — Timed Ranking (<2 min)**
 
-`rank.py` loads the `.npy` files, computes vectorised cosine similarity in NumPy (100K dot products in under 1 second), streams `candidates.jsonl.gz`, filters honeypots, and for each surviving candidate blends a semantic score with a 5-component rule score:
+`rank.py` loads the `.npy` files, computes vectorised cosine similarity in NumPy (100K dot products in under 1 second), streams `candidates.jsonl` (or `.jsonl.gz`), filters honeypots, and for each surviving candidate blends a semantic score with a 5-component rule score:
 
 ```
 final_score = 0.60 × cosine_similarity
@@ -76,7 +76,7 @@ ai-bharat-builders-redrankAI/               ← GitHub repo root
 ├── README.md                               # This file
 ├── LICENSE                                 # MIT License
 ├── requirements.txt                        # Root-level deps for Streamlit Cloud deployment
-├── .gitignore                              # Excludes candidates.jsonl.gz, __pycache__, .venv
+├── .gitignore                              # Excludes candidates.jsonl, __pycache__, .venv
 ├── .gitattributes                          # Git LFS tracking for *.npy files
 ├── assets/
 │   └── screenshot.png                     # Live demo screenshot
@@ -91,10 +91,14 @@ ai-bharat-builders-redrankAI/               ← GitHub repo root
 │   ├── requirements-sandbox.txt            # Full deps including Streamlit + pandas
 │   ├── submission_metadata.yaml            # Team identity, compute specs, AI tools declaration
 │   ├── Dockerfile                          # CPU-only Docker image for reproducible ranking
-│   └── test_data/                          # Sample data for local testing (no full dataset needed)
-│       ├── sample_candidates.json          # 50 sample candidate profiles
-│       ├── sample_submission.csv           # Reference valid submission format
-│       ├── candidate_schema.json           # Full candidate field schema
+│   └── test_data/                          # Hackathon-provided datasets + test scripts
+│       ├── sample_candidates.json          # 50 sample candidate profiles (from hackathon)
+│       ├── sample_submission.csv           # Reference valid submission format (from hackathon)
+│       ├── candidate_schema.json           # Full candidate field schema (from hackathon)
+│       ├── job_description.docx            # Official JD for Senior AI Engineer (from hackathon)
+│       ├── redrob_signals_doc.docx         # Signals field reference doc (from hackathon)
+│       ├── submission_spec.docx            # Full submission specification (from hackathon)
+│       ├── validate_submission.py          # Official validator script (from hackathon)
 │       └── test_pipeline.py               # End-to-end smoke test (no model/GPU required)
 ```
 
@@ -123,10 +127,15 @@ python -m venv .venv
 # source .venv/bin/activate   # Mac/Linux
 ```
 
-### 4. Install PyTorch (CPU-only wheel)
+### 4. Install PyTorch (CPU-only)
 
+**Windows:**
 ```bash
 pip install torch==2.3.1+cpu --index-url https://download.pytorch.org/whl/cpu
+```
+**Mac / Linux:**
+```bash
+pip install torch
 ```
 
 ### 5. Install remaining dependencies
@@ -135,9 +144,18 @@ pip install torch==2.3.1+cpu --index-url https://download.pytorch.org/whl/cpu
 pip install -r requirements.txt
 ```
 
-### 6. Download and save the model locally
+### 6. Copy the dataset into the source folder
 
-Run this once. It saves the model to `./model` so ranking never needs network access.
+Copy `candidates.jsonl` (provided by hackathon) into the current folder:
+```bash
+# Windows
+copy "C:\path\to\candidates.jsonl" .
+
+# Mac/Linux
+cp /path/to/candidates.jsonl .
+```
+
+### 7. Download and save the model locally *(needs internet, one time only)*
 
 ```python
 from sentence_transformers import SentenceTransformer
@@ -145,47 +163,85 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 model.save("./model")
 print("Model saved to ./model")
 ```
+> After this step, turn WiFi off — everything below is fully offline.
 
-### 7. Run precompute (once, offline, ~15 min)
+### 8. Run precompute *(once, ~15 min, offline)*
 
 ```bash
 python precompute.py \
-    --candidates ./candidates.jsonl.gz \
+    --candidates ./candidates.jsonl \
     --model ./model \
     --out ./
 ```
 
-This produces `embeddings.npy`, `candidate_ids.npy`, and `jd_embedding.npy`.
+Expected output:
+```
+INFO Loaded 100000 candidates (0 parse errors)
+INFO Total time: ~900 seconds (~15 minutes)
+```
+Produces: `embeddings.npy`, `candidate_ids.npy`, `jd_embedding.npy`
 
-### 8. Run the ranker (<2 min)
+### 9. Run the ranker *(<2 min, offline)*
 
 ```bash
 python rank.py \
-    --candidates ./candidates.jsonl.gz \
+    --candidates ./candidates.jsonl \
     --embeddings ./embeddings.npy \
     --ids ./candidate_ids.npy \
     --jd ./jd_embedding.npy \
     --out ./submission.csv
 ```
 
-### 9. Validate the output
-
-```bash
-python validate_submission.py submission.csv
-# Expected: "Submission is valid."
+Expected output:
+```
+INFO Loaded embeddings shape=(100000, 384)
+INFO Scoring done: 99XXX scored, X honeypots filtered
+INFO Done. Total time: ~90 seconds
 ```
 
-### 10. Convert to XLSX for portal upload
+### 10. Validate the output
+
+```bash
+python test_data/validate_submission.py submission.csv
+```
+
+Expected output:
+```
+Submission is valid.
+```
+
+### 11. Convert to XLSX for portal upload
 
 ```bash
 python convert_to_xlsx.py --input ./submission.csv --output ./submission.xlsx
 ```
 
-### 11. (Optional) Run smoke test without full dataset
+Expected output:
+```
+INFO Saved submission.xlsx (100 rows)
+```
+
+### 12. (Optional) Run smoke test without full dataset
 
 ```bash
 python test_data/test_pipeline.py
-# Expected: "All tests passed! [OK]"
+```
+
+Expected output:
+```
+Loading sample candidates ...
+Loaded 50 candidates from sample_candidates.json
+
+Running scorer tests ...
+  All scorer tests passed.
+Running honeypot detection test ...
+  Honeypot detection passed. (0 flagged out of 50)
+Running ranking pipeline test ...
+  Ranking pipeline passed — 50 rows, non-increasing scores, unique IDs.
+
+  validate_submission skipped (needs exactly 100 rows).
+
+All tests passed! [OK]
 ```
 
 ---
@@ -397,7 +453,7 @@ docker build -t redrankai:latest .
 
 ### Run
 
-Mount a directory containing `candidates.jsonl.gz` and the three `.npy` files:
+Mount a directory containing `candidates.jsonl` and the three `.npy` files:
 
 ```bash
 docker run --rm \

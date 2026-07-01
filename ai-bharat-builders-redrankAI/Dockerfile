@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir torch==2.3.1+cpu --index-url https://download.pyt
 COPY . .
 
 CMD ["python", "rank.py", \
-     "--candidates", "./candidates.jsonl.gz", \
+     "--candidates", "./candidates.jsonl", \
      "--embeddings", "./embeddings.npy", \
      "--ids", "./candidate_ids.npy", \
      "--jd", "./jd_embedding.npy", \
