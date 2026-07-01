@@ -76,6 +76,7 @@ ai-bharat-builders-redrankAI/               ← GitHub repo root
 ├── README.md                               # This file
 ├── LICENSE                                 # MIT License
 ├── requirements.txt                        # Root-level deps for Streamlit Cloud deployment
+├── submission_metadata.yaml                # Team identity, compute specs, AI tools declaration (repo root — required by spec)
 ├── .gitignore                              # Excludes candidates.jsonl, __pycache__, .venv
 ├── .gitattributes                          # Git LFS tracking for *.npy files
 ├── assets/
@@ -88,8 +89,6 @@ ai-bharat-builders-redrankAI/               ← GitHub repo root
 │   ├── app.py                              # Streamlit sandbox (upload JSON → rank → download CSV)
 │   ├── convert_to_xlsx.py                  # Convert submission.csv → formatted submission.xlsx
 │   ├── requirements.txt                    # Core pipeline deps (rank.py + precompute.py)
-│   ├── requirements-sandbox.txt            # Full deps including Streamlit + pandas
-│   ├── submission_metadata.yaml            # Team identity, compute specs, AI tools declaration
 │   ├── Dockerfile                          # CPU-only Docker image for reproducible ranking
 │   └── test_data/                          # Hackathon-provided datasets + test scripts
 │       ├── sample_candidates.json          # 50 sample candidate profiles (from hackathon)
